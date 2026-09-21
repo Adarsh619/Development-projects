@@ -217,6 +217,46 @@
   color: var(--over);
 }
 
+.entry-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.edit-btn,
+.cancel-btn {
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  padding: 4px 6px;
+  border-radius: 8px;
+}
+
+.edit-btn:hover {
+  background: var(--accent-soft);
+}
+
+.cancel-btn {
+  color: var(--muted);
+}
+
+.cancel-btn:hover {
+  background: #f7f3ea;
+}
+
+.edit-entry {
+  grid-template-columns: minmax(0, 1fr) 90px 120px auto;
+}
+
+.edit-entry input,
+.edit-entry select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 7px 8px;
+  background: #fff;
+}
+
 .empty {
   color: var(--muted);
   background: var(--paper);

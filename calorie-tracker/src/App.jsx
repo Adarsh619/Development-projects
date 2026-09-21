@@ -82,6 +82,10 @@ export default function App() {
   const [name, setName] = useState('')
   const [calories, setCalories] = useState('')
   const [meal, setMeal] = useState('Breakfast')
+  const [editingId, setEditingId] = useState(null)
+  const [editingName, setEditingName] = useState('')
+  const [editingCalories, setEditingCalories] = useState('')
+  const [editingMeal, setEditingMeal] = useState('Breakfast')
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ goal, days }))
@@ -120,6 +124,38 @@ export default function App() {
       ...prev,
       [date]: (prev[date] ?? []).filter((item) => item.id !== id),
     }))
+  }
+
+  function startEditing(item) {
+    setEditingId(item.id)
+    setEditingName(item.name)
+    setEditingCalories(String(item.calories))
+    setEditingMeal(item.meal)
+  }
+
+  function cancelEditing() {
+    setEditingId(null)
+    setEditingName('')
+    setEditingCalories('')
+    setEditingMeal('Breakfast')
+  }
+
+  function saveEdit() {
+    const kcal = Number(editingCalories)
+    const trimmed = editingName.trim()
+
+    if (!trimmed || !Number.isFinite(kcal) || kcal <= 0) return
+
+    setDays((prev) => ({
+      ...prev,
+      [date]: (prev[date] ?? []).map((item) =>
+        item.id === editingId
+          ? { ...item, name: trimmed, calories: Math.round(kcal), meal: editingMeal }
+          : item,
+      ),
+    }))
+
+    cancelEditing()
   }
 
   return (
@@ -210,15 +246,56 @@ export default function App() {
                 <h3>
                   {group} · {items.reduce((sum, item) => sum + item.calories, 0)} kcal
                 </h3>
-                {items.map((item) => (
-                  <article className="entry" key={item.id}>
-                    <strong>{item.name}</strong>
-                    <span className="calories">{item.calories} kcal</span>
-                    <button className="remove" type="button" onClick={() => removeFood(item.id)} aria-label={`Remove ${item.name}`}>
-                      Remove
-                    </button>
-                  </article>
-                ))}
+                {items.map((item) =>
+  editingId === item.id ? (
+    <article className="entry edit-entry" key={item.id}>
+      <input
+        value={editingName}
+        onChange={(e) => setEditingName(e.target.value)}
+        aria-label="Edit food name"
+      />
+      <input
+        type="number"
+        min="1"
+        value={editingCalories}
+        onChange={(e) => setEditingCalories(e.target.value)}
+        aria-label="Edit calories"
+      />
+      <select
+        value={editingMeal}
+        onChange={(e) => setEditingMeal(e.target.value)}
+        aria-label="Edit meal"
+      >
+        {MEALS.map((mealOption) => (
+          <option key={mealOption} value={mealOption}>
+            {mealOption}
+          </option>
+        ))}
+      </select>
+      <div className="entry-actions">
+        <button className="edit-btn" type="button" onClick={saveEdit}>
+          Save
+        </button>
+        <button className="cancel-btn" type="button" onClick={cancelEditing}>
+          Cancel
+        </button>
+      </div>
+    </article>
+  ) : (
+    <article className="entry" key={item.id}>
+      <strong>{item.name}</strong>
+      <span className="calories">{item.calories} kcal</span>
+      <div className="entry-actions">
+        <button className="edit-btn" type="button" onClick={() => startEditing(item)}>
+          Edit
+        </button>
+        <button className="remove" type="button" onClick={() => removeFood(item.id)}>
+          Remove
+        </button>
+      </div>
+    </article>
+  ),
+)}
               </div>
             )
           })
