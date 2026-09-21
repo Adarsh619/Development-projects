@@ -82,6 +82,7 @@ export default function App() {
   const [name, setName] = useState('')
   const [calories, setCalories] = useState('')
   const [meal, setMeal] = useState('Breakfast')
+  const [formError, setFormError] = useState('')
   const [editingId, setEditingId] = useState(null)
   const [editingName, setEditingName] = useState('')
   const [editingCalories, setEditingCalories] = useState('')
@@ -102,7 +103,17 @@ export default function App() {
     event.preventDefault()
     const kcal = Number(calories)
     const trimmed = name.trim()
-    if (!trimmed || !Number.isFinite(kcal) || kcal <= 0) return
+    if (!trimmed) {
+  setFormError('Please enter a food name.')
+  return
+}
+
+if (!Number.isFinite(kcal) || kcal <= 0) {
+  setFormError('Please enter a calorie amount greater than 0.')
+  return
+}
+
+setFormError('')
 
     const entry = {
       id: crypto.randomUUID(),
@@ -231,6 +242,11 @@ export default function App() {
             Add
           </button>
         </div>
+        {formError && (
+  <p className="form-error" role="alert">
+    {formError}
+  </p>
+)}
       </form>
 
       <section className="log">

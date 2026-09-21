@@ -167,6 +167,12 @@
   filter: brightness(1.05);
 }
 
+.form-error {
+  margin: 10px 2px 0;
+  color: var(--over);
+  font-size: 0.9rem;
+}
+
 .log {
   margin-top: 20px;
 }
