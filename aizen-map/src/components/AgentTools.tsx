@@ -1,0 +1,5 @@
+'use client';
+import {useEffect} from 'react';
+import {listings} from '@/lib/listings';
+type Context={registerTool:(tool:{name:string;description:string;inputSchema:object;annotations:object;execute:(input:unknown)=>unknown},options:{signal:AbortSignal})=>void|Promise<void>};
+export default function AgentTools(){useEffect(()=>{const context=(document as Document&{modelContext?:Context}).modelContext;if(!context)return;const lifecycle=new AbortController();try{Promise.resolve(context.registerTool({name:'read_curated_listings',description:'Read sourced Bengaluru place and dated event records. Returns no ratings or live availability.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true,untrustedContentHint:false},execute(input){if(!input||typeof input!=='object'||Object.keys(input).length)throw new Error('Expected an empty object');return {live:false,listings};}},{signal:lifecycle.signal})).catch(()=>{});}catch{}return()=>lifecycle.abort();},[]);return null;}
