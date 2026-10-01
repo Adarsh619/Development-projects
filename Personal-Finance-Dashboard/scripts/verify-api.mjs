@@ -1,0 +1,13 @@
+import { build } from 'esbuild';
+import { mkdir } from 'node:fs/promises';
+import assert from 'node:assert/strict';
+await mkdir('artifacts',{recursive:true});
+await build({entryPoints:['netlify/functions/api.ts'],outfile:'artifacts/api.mjs',bundle:true,platform:'node',format:'esm',target:'node22'});
+const {default:handler}=await import('../artifacts/api.mjs');
+delete process.env.SUPABASE_URL;delete process.env.SUPABASE_ANON_KEY;
+let response=await handler(new Request('http://localhost/api/health'),{});
+assert.equal(response.status,503);
+process.env.SUPABASE_URL='https://example.supabase.co';process.env.SUPABASE_ANON_KEY='placeholder-not-real';
+response=await handler(new Request('http://localhost/api/snapshot'),{});
+assert.equal(response.status,401);
+console.log('REST function bundle and missing-config/missing-auth guards passed. No credentialed requests made.');

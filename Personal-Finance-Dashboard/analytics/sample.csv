@@ -1,0 +1,15 @@
+date,merchant,amount,category,kind
+2026-07-01,Salary,65000,Salary,income
+2026-07-05,Groceries,2200,Food,expense
+2026-07-10,Cafe,500,Food,expense
+2026-07-20,Rent,11200,Housing,expense
+2026-08-01,Salary,65000,Salary,income
+2026-08-05,Groceries,2300,Food,expense
+2026-08-20,Rent,11200,Housing,expense
+2026-09-01,Salary,65000,Salary,income
+2026-09-05,Groceries,2100,Food,expense
+2026-09-20,Rent,11200,Housing,expense
+2026-10-01,Salary,65000,Salary,income
+2026-10-05,Party catering,6000,Food,expense
+2026-10-20,Rent,11200,Housing,expense
+2026-10-25,Move to savings,25000,Transfer,transfer

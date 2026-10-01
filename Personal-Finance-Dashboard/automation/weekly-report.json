@@ -1,0 +1,12 @@
+{
+  "name": "FinanceFlow · local weekly snapshot",
+  "active": false,
+  "nodes": [
+    {"parameters": {}, "id": "manual", "name": "Run manually", "type": "n8n-nodes-base.manualTrigger", "typeVersion": 1, "position": [0, 0]},
+    {"parameters": {"rule": {"interval": [{"field": "weeks", "triggerAtDay": [1], "triggerAtHour": 9}]}}, "id": "weekly", "name": "Monday morning", "type": "n8n-nodes-base.scheduleTrigger", "typeVersion": 1.2, "position": [0, 180]},
+    {"parameters": {"url": "http://host.docker.internal:8888/api/snapshot", "authentication": "genericCredentialType", "genericAuthType": "httpHeaderAuth", "options": {"timeout": 15000}}, "id": "fetch", "name": "Authenticated workspace", "type": "n8n-nodes-base.httpRequest", "typeVersion": 4.2, "position": [240, 80], "retryOnFail": true, "maxTries": 3, "waitBetweenTries": 3000},
+    {"parameters": {"jsCode": "const s = $input.first().json; const tx = s.transactions || []; const month = new Date().toISOString().slice(0,7); const current = tx.filter(t => t.date.startsWith(month)); const income = current.filter(t => t.kind === 'income').reduce((n,t)=>n+t.amount,0); const expense = current.filter(t => t.kind === 'expense').reduce((n,t)=>n+t.amount,0); return [{json:{month,currency:'INR',income,expense,surplus:income-expense,source:'authenticated REST snapshot',generatedAt:new Date().toISOString(),note:'Stored in local n8n execution output. No automatic email or external messaging.'}}];"}, "id": "summary", "name": "Local summary", "type": "n8n-nodes-base.code", "typeVersion": 2, "position": [480, 80]}
+  ],
+  "connections": {"Run manually": {"main": [[{"node": "Authenticated workspace", "type": "main", "index": 0}]]}, "Monday morning": {"main": [[{"node": "Authenticated workspace", "type": "main", "index": 0}]]}, "Authenticated workspace": {"main": [[{"node": "Local summary", "type": "main", "index": 0}]]}},
+  "settings": {"executionOrder": "v1", "timezone": "Asia/Kolkata", "saveDataSuccessExecution": "all", "saveDataErrorExecution": "all"}
+}

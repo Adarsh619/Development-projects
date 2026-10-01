@@ -1,0 +1,56 @@
+import { chromium } from '@playwright/test';
+import { mkdir } from 'node:fs/promises';
+import assert from 'node:assert/strict';
+const browser=await chromium.launch({channel:process.env.BROWSER_CHANNEL||'chrome',headless:true});
+const context=await browser.newContext({viewport:{width:1440,height:1080}});
+const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+await mkdir('artifacts',{recursive:true});
+try{
+ await page.goto(process.env.PREVIEW_URL||'http://127.0.0.1:5173');
+ await page.getByRole('button',{name:'Try demo'}).click();
+ await page.getByRole('heading',{name:'Your finances at a glance.'}).waitFor();
+ await page.waitForTimeout(1800);
+ assert.equal(await page.locator('.donut .recharts-sector').count(),6,'Category chart renders all sectors');
+ await page.screenshot({path:'artifacts/overview-dark.png',fullPage:true});
+ await page.getByRole('button',{name:'Switch to light theme'}).click();
+ assert.equal(await page.locator('html').getAttribute('data-theme'),'light');
+ await page.waitForTimeout(1800);
+ await page.screenshot({path:'artifacts/overview-light.png',fullPage:true});
+ for(const name of ['Accounts','Transactions','Budgets','Savings goals','Bills & subscriptions','Reports','Automations','Settings']){
+  await page.locator('nav').getByRole('button',{name,exact:true}).click();
+  await page.getByRole('heading',{name,exact:true}).first().waitFor();
+ }
+ await page.locator('nav').getByRole('button',{name:'Transactions',exact:true}).click();
+ await page.getByRole('button',{name:'Add transaction',exact:true}).click();
+ const dialog=page.getByRole('dialog');
+ await dialog.getByLabel('Merchant / description').fill('Browser test coffee');
+ await dialog.getByLabel('Amount (₹)').fill('123.45');
+ await dialog.getByRole('button',{name:'Save transaction'}).click();
+ await page.getByRole('textbox',{name:'Search transactions'}).fill('Browser test coffee');
+ assert.equal(await page.locator('tbody tr').count(),1);
+ await page.reload();
+ await page.locator('nav').getByRole('button',{name:'Transactions',exact:true}).click();
+ await page.getByRole('textbox',{name:'Search transactions'}).fill('Browser test coffee');
+ assert.equal(await page.locator('tbody tr').count(),1);
+ await page.getByRole('button',{name:'Edit',exact:true}).click();
+ await page.getByRole('dialog').getByLabel('Amount (₹)').fill('234.56');
+ await page.getByRole('dialog').getByRole('button',{name:'Save transaction'}).click();
+ assert.match(await page.locator('tbody tr').innerText(),/235/);
+ await page.getByRole('button',{name:'Edit',exact:true}).click();
+ await page.getByRole('dialog').getByRole('button',{name:'Delete transaction'}).click();
+ assert.equal(await page.locator('tbody tr').count(),0);
+ await page.getByRole('button',{name:'Import CSV'}).click();
+ await page.getByRole('dialog').locator('input[type=file]').setInputFiles({name:'sample.csv',mimeType:'text/csv',buffer:Buffer.from('date,merchant,amount,category,kind\n2026-10-30,Browser import,80,Food,expense\n2026-10-30,Browser import,80,Food,expense\n2026-10-32,Bad date,80,Food,expense')});
+ await page.getByRole('button',{name:'Import 1 valid rows'}).click();
+ await page.getByRole('textbox',{name:'Search transactions'}).fill('Browser import');
+ assert.equal(await page.locator('tbody tr').count(),1);
+ await page.locator('nav').getByRole('button',{name:'Overview',exact:true}).click();
+ await page.setViewportSize({width:390,height:844});
+ await page.screenshot({path:'artifacts/overview-mobile.png',fullPage:true});
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth),true,'Mobile horizontal overflow');
+ await page.getByRole('button',{name:'Open navigation'}).click();
+ await page.locator('nav').getByRole('button',{name:'Transactions',exact:true}).click();
+ await page.getByRole('heading',{name:'Transactions',exact:true}).waitFor();
+ assert.deepEqual(errors,[]);
+ console.log('Browser verification passed: all 9 screens, both themes, transaction CRUD/persistence, CSV dedup/validation, mobile navigation/layout; no page errors.');
+}finally{await browser.close();}

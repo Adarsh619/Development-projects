@@ -1,0 +1,49 @@
+{
+  "currency": "INR",
+  "source": "local CSV",
+  "monthly": [
+    {
+      "month": "2026-07",
+      "expense": 13900,
+      "income": 65000,
+      "surplus": 51100
+    },
+    {
+      "month": "2026-08",
+      "expense": 13500,
+      "income": 65000,
+      "surplus": 51500
+    },
+    {
+      "month": "2026-09",
+      "expense": 13300,
+      "income": 65000,
+      "surplus": 51700
+    },
+    {
+      "month": "2026-10",
+      "expense": 17200,
+      "income": 65000,
+      "surplus": 47800
+    }
+  ],
+  "categories": {
+    "Food": 13100,
+    "Housing": 44800
+  },
+  "flags": [
+    {
+      "date": "2026-10-05",
+      "merchant": "Party catering",
+      "category": "Food",
+      "amount": 6000.0,
+      "baseline": 1775.0
+    }
+  ],
+  "forecast_net_additions": {
+    "1": 50333.33,
+    "2": 100666.67,
+    "3": 151000.0
+  },
+  "assumptions": "Last three recorded months average surplus. Transfers excluded. Unchanged income/spending, no interest or inflation. Not investment advice or a prediction."
+}
