@@ -2,11 +2,11 @@
 
 Aizen Map is a responsive Bengaluru discovery website that pairs a curated list of places and activities with an interactive city map. It is designed to help people find a café, food stop, cinema venue, or plan for the next few days without switching between a long list and a separate map.
 
-> **Version 1.0 · pre-deployment.** The interface is a portfolio project and curated preview, not a live booking or event-inventory service. Check each listing's linked source before travelling.
+> **Version 1.0.** The interface is a portfolio project and curated preview, not a live booking or event-inventory service. Check each listing's linked source before travelling.
 
 ## Live Demo
 
-**Netlify URL:** _To be added after the first public deployment._
+**Live site:** [Explore Aizen Map](https://aizenmap.netlify.app/)
 
 ## Application Preview
 
