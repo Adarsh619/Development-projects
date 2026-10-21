@@ -8,6 +8,14 @@ Aizen Map is a responsive Bengaluru discovery website that pairs a curated list 
 
 **Live site:** [Explore Aizen Map](https://aizenmap.netlify.app/)
 
+## Documentation
+
+Start with the [documentation index](docs/README.md) to browse the separate project guides.
+
+- [Architecture](docs/ARCHITECTURE.md) and [features](docs/FEATURES.md).
+- [Event visibility](docs/EVENT_VISIBILITY.md) and [listing maintenance](docs/LISTING_MAINTENANCE.md).
+- [Local development](docs/DEVELOPMENT.md), [deployment](docs/DEPLOYMENT.md), and [testing](docs/TESTING.md).
+
 ## Application Preview
 
 These are screenshots of the running application:
@@ -81,10 +89,22 @@ On Windows, if PowerShell blocks `npm.ps1`, run `npm.cmd install` and `npm.cmd r
 ```bash
 npm run typecheck
 npm run build
-npm run start
 ```
 
-`typecheck` runs TypeScript without emitting files. `build` creates the production build; `start` serves it locally. There is no automated test suite yet.
+`typecheck` runs TypeScript without emitting files. `build` exports the production website to `out/`, including `out/index.html` and `out/_next/static/`. Serve `out/` with a static HTTP server to preview the production output. The existing `npm run start` script uses `next start`, which is incompatible with `output: 'export'`; use `npm run dev` during development instead. There is no automated test suite yet.
+
+## Netlify Deployment
+
+The production site uses Next.js static export, configured in `next.config.mjs`.
+
+| Setting | Value |
+| --- | --- |
+| Base directory | `aizen-map` when deploying from the `Development-projects` repository; repository root when deploying this folder alone |
+| Build command | `npm run build` |
+| Publish directory | `out` relative to the base directory |
+| Required environment variables | None |
+
+Publish the exported `out/` directory, not `.next` or `.next/server/app`. The `.next` directory contains build internals rather than the complete static website. Listing changes require a new build and deployment; event visibility continues updating in the browser between deployments. See the [deployment guide](docs/DEPLOYMENT.md) for release checks.
 
 ## Project Structure
 
@@ -93,11 +113,13 @@ npm run start
 | `src/app/page.tsx` | Discovery UI, search, filtering, favourites, details, and responsive navigation |
 | `src/app/globals.css`, `src/app/navigation.css` | Layout, responsive styling, dark mode, and controls |
 | `src/components/CityMap.tsx` | Interactive Leaflet map and tile-failure fallback |
+| `src/components/AgentTools.tsx` | Optional read-only listing tool for browsers that expose `document.modelContext` |
 | `src/lib/listings.ts`, `src/lib/*Listings.ts` | Local curated listing records and provider |
 | `src/lib/eventVisibility.ts` | Bengaluru-time visibility rules for dated events |
 | `src/lib/archivedEvents.ts` | Historical event records excluded from active results |
 | `public/screenshots/` | Real application screenshots used in this README |
-| `QA.md` | Manual browser-check notes |
+| `docs/README.md` | Documentation index linking to individual topic guides |
+| `docs/` | Separate guides for architecture, features, events, maintenance, development, deployment, privacy, troubleshooting, and QA |
 
 ## Data and Attribution
 

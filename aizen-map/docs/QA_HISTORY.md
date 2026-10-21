@@ -1,4 +1,10 @@
-# Local verification — Aizen Map
+# QA History
+
+[Documentation index](README.md) · [Project README and screenshots](../README.md)
+
+## Historical browser verification — September 2026
+
+The notes below describe an earlier preview. Event dates and listing counts are historical; they do not describe the current dataset or provide current release certification. Those September event records are now archived outside the active provider.
 
 Checked with the local app browser at desktop (1440×900) and phone (390×844). Production build and TypeScript check completed after the changes.
 
@@ -10,3 +16,5 @@ Checked with the local app browser at desktop (1440×900) and phone (390×844). 
 - The prior version's saved-pick persistence, combined filters, empty state, details dialog and reduced-motion styling remain implemented; this turn's browser checks focused on the changed flows.
 
 The preview contains manually checked event records and source-linked place records. It does not refresh third-party listings or ratings live. User should confirm each event and opening hour using its source link before travelling.
+
+For current release checks, use [Testing and Verification](TESTING.md).
