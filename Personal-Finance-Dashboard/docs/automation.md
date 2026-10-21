@@ -10,7 +10,9 @@ python -m venv .venv
 # macOS/Linux: .venv/bin/python instead
 ```
 
-Export all desired transactions from the app, then use that CSV instead of `analytics/sample.csv`. Output contains monthly income/expense/surplus, category totals, 1.8× historical flags and forecast net additions with assumptions. Transfers are excluded. Nothing is sent to a cloud service. The supplied output is generated from the fictional sample, not a connected account.
+Transaction export is limited to the selected month's filtered rows. For a multi-month analysis, export each desired month and combine the CSVs with one header row before running the analyzer. Output contains monthly income/expense/surplus, category totals across the whole input, flags for the input's latest month, and forecast net additions with assumptions. Transfers are excluded from financial totals. Nothing is sent to a cloud service. The supplied output is generated from the fictional sample, not a connected account.
+
+For private analysis, create ignored `private-data/` first and write there, for example `.venv\Scripts\python analytics/analyze.py private-data/transactions.csv --output private-data/report.json`. The analyzer does not create output parent directories. Do not overwrite the tracked sample output with real financial data. Python's forecast is net additions to funds, while the UI adds its calculated surplus to current account balances; the two outputs are not the same balance figure.
 
 ## n8n Community
 

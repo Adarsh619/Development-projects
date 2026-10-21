@@ -2,7 +2,7 @@
 
 A personal finance portfolio app for understanding everyday spending and planning bigger goals. FinanceFlow combines a responsive React workspace, fictional Indian rupee demo data, optional authenticated REST APIs, and local analytics and automation.
 
-**Status:** the local demo is implemented and browser-verified. Supabase, Google OAuth, Redis, n8n execution and deployment require your configuration and have not been verified against live services. No site is currently deployed. No paid AI or cloud n8n trial is required.
+**Status:** the credential-free demo is implemented, with local build/browser results recorded from the implementation session. Supabase, Google OAuth, Redis, n8n execution and deployment require your configuration and have not been verified against live services in this review. See the dated [validation record](docs/validation.md). No paid AI or cloud n8n trial is required.
 
 ![FinanceFlow dashboard in slate dark mode](docs/screenshots/dashboard-dark.png)
 
@@ -59,7 +59,7 @@ flowchart LR
   N8N[Local n8n Community] -->|Authenticated snapshot| API
 ```
 
-The full demo works without backend credentials. Local storage is not encrypted. Cloud load replaces local state; cloud sync explicitly replaces the user's remote workspace. Signing in does not upload fictional records automatically. The local queue does not dispatch to n8n. See [architecture and access policies](docs/architecture.md).
+The full demo works without backend credentials. One unencrypted browser workspace is shared across local sessions; signing out does not erase it. Cloud load replaces that local snapshot; cloud sync explicitly replaces the signed-in user's remote workspace. Signing in does not upload fictional records automatically. The local queue does not dispatch to n8n. See [architecture and access policies](docs/architecture.md).
 
 ## Quick start
 
@@ -70,7 +70,7 @@ npm ci
 npm run dev
 ```
 
-Open the printed local URL, normally `http://127.0.0.1:5173`, and select **Try demo**. The initial reporting month is October 2026. All rupee data is fictional and stored in this browser. Theme and sidebar collapse persist; demo entry is session-scoped.
+Run these commands from the folder containing `package.json`. Open the printed local URL, normally `http://127.0.0.1:5173`, and select **Try demo**. Keep the terminal running while using the app. The initial reporting month is October 2026. The initial rupee data is fictional and stored in this browser. Theme and sidebar collapse persist; demo entry is session-scoped.
 
 To run the production build locally:
 
@@ -91,7 +91,7 @@ The default preview is `http://127.0.0.1:4173`. These are local addresses, not h
 | `npm run build` | Type checking and production bundling |
 | `npm run preview` | Serve the existing production build |
 | `npm run verify:api` | Bundle REST function; test missing-config/auth guards without external requests |
-| `npm run verify:browser` | Running dev server at port 5173 and installed Chrome by default |
+| `npm run verify:browser` | Running dev server at port 5173, installed Chrome, no Supabase credentials and original fictional demo seed |
 | `npm run verify:navigation` | Running production preview at port 4173; assumes no Supabase credentials |
 | `npm run verify:docs` | Validate local documentation links, asset paths, npm commands, environment coverage and standalone CI paths |
 
@@ -103,7 +103,7 @@ npm run verify:browser
 npm run verify:navigation
 ```
 
-Build, nine tests, production browser interaction checks, REST guard checks and the pandas sample have passed locally. The last dependency audit reported zero vulnerabilities; this is a recorded result, not a future guarantee. See [validation and remaining limits](docs/validation.md).
+Build, nine tests, production browser interaction checks, REST guard checks and the pandas sample passed during the implementation session on 1 October 2026. That session's dependency audit reported zero vulnerabilities; neither live-service health nor today's dependency advisories can be inferred from that result. See [validation and remaining limits](docs/validation.md).
 
 ## Environment and optional services
 
@@ -127,6 +127,8 @@ Never expose a service-role key, Redis token, Google client secret or user acces
 | Python/pandas | [Analytics guide](docs/automation.md) | Runnable sample and generated JSON verified |
 
 For full local REST testing, use Netlify CLI (`npx netlify dev`, normally port 8888) with your configuration. Sign in, explicitly load the initially empty cloud workspace in Settings, create an account and transaction, then sync. Back up local data before cloud load. No automatic conflict resolution is implemented.
+
+Email sign-in uses links for existing accounts; Create account is a separate registration flow. Default Supabase email delivery has recipient restrictions; see the [authentication guide](docs/authentication.md). For blank pages, refused local connections, API errors or missing sign-in messages, use [troubleshooting](docs/troubleshooting.md).
 
 ## Project structure
 
@@ -160,5 +162,6 @@ Optional deployment is documented in [Netlify setup](docs/deployment.md). No res
 - [Deployment and free-tier limits](docs/deployment.md)
 - [Safe GitHub publishing](docs/publishing.md)
 - [Validation and known limitations](docs/validation.md)
+- [Troubleshooting](docs/troubleshooting.md)
 
 No license terms have been selected. Add your chosen license before granting reuse rights.

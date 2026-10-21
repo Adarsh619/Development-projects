@@ -29,7 +29,7 @@ git add .
 git diff --cached --stat
 git diff --cached --name-only
 git commit -m "Add FinanceFlow personal finance workspace"
-git remote add origin <YOUR_REPOSITORY_URL>
+git remote add origin "YOUR_REPOSITORY_URL"
 git push -u origin main
 ```
 

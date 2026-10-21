@@ -1,6 +1,14 @@
 # Validation record
 
-Validated locally on Windows with Node 24.13 and Python 3.14:
+## Documentation review — 21 October 2026
+
+Rechecked README and detailed guides against current UI, domain logic, REST handler, environment example, workflow and local scripts. Corrected missing-month rollover and fixed chart-range descriptions, filtered export/backup limitations, email delivery/setup details, local snapshot privacy, REST upload/pagination limits and shell-safe Git instructions. Added troubleshooting. Supabase provider and Data API guidance was cross-checked with official docs; no services or schema were changed.
+
+Current checks passed: `npm run verify:docs` validated 10 guides, 36 local links/assets, 23 npm command references, eight environment variables and standalone CI paths. Node syntax checks passed for the documentation checker and browser/navigation/screenshot scripts. Application code and service configuration were not modified. The checks below belong to the earlier implementation session; they are not new browser/build/cloud results or a current dependency audit.
+
+## Implementation checks — 1 October 2026
+
+Historical local results on Windows with Node 24.13 and Python 3.14:
 
 - TypeScript strict check and production Vite build passed.
 - 9 Vitest tests passed: transfer conservation/exclusion, transfer/date rejection, rollover, CSV quote parsing/dedup/invalid amounts, spreadsheet formula escaping, backend workspace validation/account references, historical outlier detection and session-dependent account actions.

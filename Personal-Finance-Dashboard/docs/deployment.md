@@ -9,6 +9,10 @@ No site was deployed and no service/account was provisioned.
 5. Configure `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, and optionally the two Redis variables. Rebuild when changing public Vite variables. Never expose backend-only tokens with the VITE prefix.
 6. Test sign-in, load an empty workspace, create account + transaction, sync, reload, and verify access isolation using two distinct users. Review actual logs and quotas before declaring an integration connected.
 
+Confirm that `public` is exposed in your Supabase Data API settings and that the six tables and `replace_workspace` RPC are accessible to `authenticated` users. The supplied SQL explicitly grants table CRUD/RPC execution and enables ownership RLS; do not rely on automatic grants or disable RLS to fix access errors. Project defaults can differ. See [Supabase Data API security](https://supabase.com/docs/guides/api/securing-your-api).
+
+Use the same origin in Supabase allowed redirect URLs and your browser. Include the Netlify dev origin (normally `http://localhost:8888`) if testing Functions locally. For email-login delivery restrictions and compatible redirect flow, follow [authentication setup](authentication.md).
+
 Free quotas and product terms change. Check current official Netlify/Supabase/Upstash plans at setup time, select free plans, set zero-spend alerts/limits where supported, and do not enable usage-based upgrades. Supabase projects may pause with inactivity; hosted functions have usage/bandwidth quotas; Redis has request/storage quotas; GitHub Actions limits depend on account/repository. They are optional: the independent local demo, analytics and Community n8n keep operating without paid services.
 
 Vite preview does not run Functions. Use your installed Netlify CLI for full local API testing. `npx netlify dev` may install a CLI if absent, but it does not deploy by itself. Docker consumes local resources and is not required to view the app. Current cloud quotas were not verified because this task did not provision or deploy any services.

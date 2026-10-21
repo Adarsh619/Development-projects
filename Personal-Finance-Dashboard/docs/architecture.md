@@ -21,6 +21,8 @@ REST validates date/amount/kind/account references and collection limits. Direct
 
 Redis optional rate check is an atomic INCR+EXPIRE Lua script: 60 authenticated requests per minute per user. Configured Redis outage fails closed. Report cache is scoped by user/month/transaction SHA-256, expires in 300 seconds, and cannot return another user's report. Redis is never used for auth. Cache still reads the snapshot to fingerprint it: this is a correctness-first starter, not a query-load optimization. No personal data is embedded in cache keys.
 
+These REST checks apply to Netlify routes, not every possible Supabase request. Authenticated users can reach their own granted tables/RPC directly through the Supabase Data API; that path still has ownership RLS but does not pass through Netlify's rate limiter or complete workspace validator. Do not treat those checks as database-wide enforcement.
+
 Demo and cloud are separate modes. Login does not migrate demo records. Cloud load is explicit and replaces local state. Cloud sync is explicit and replaces cloud state atomically. No cloud secrets, banking tokens or real n8n successes are manufactured. Demo history uses `simulated`, not `completed`.
 
 ## Browser persistence and navigation

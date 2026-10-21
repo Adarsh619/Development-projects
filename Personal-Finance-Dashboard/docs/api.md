@@ -48,7 +48,9 @@ Transfers additionally need `toAccountId` referring to a different existing acco
 
 Errors return JSON `{ "error": "..." }`. Expected statuses include 400 invalid request/database failure, 401 missing/invalid session, 404 unknown route/item, 405 unsupported mutation method, 409 duplicate ID, 429 rate limit, and 503 missing backend config or configured rate-limiter outage. POST succeeds with 201; other mutations return `{ "saved": true }`, or `{ "synced": true }` for snapshot PUT.
 
-Requests are capped at 2 MB by parsed-body text length, and collections at 10,000 items. Supabase query-return limits also apply to snapshots; the current handler does not paginate large collections, so the collection validation ceiling is not a guaranteed supported dataset size. Resource mutations read and replace the workspace, not a concurrent normalized ledger update. Explicit sync uses last-writer-wins semantics.
+The handler rejects bodies longer than 2,000,000 JavaScript string code units after reading the text; this is not a streaming or byte-accurate 2 MB upload cap. Collections are validated up to 10,000 items. Supabase query-return limits also apply to snapshots; the current handler does not paginate large collections, so the collection validation ceiling is not a guaranteed supported dataset size. Resource mutations read and replace the workspace, not a concurrent normalized ledger update. Explicit sync uses last-writer-wins semantics.
+
+Because resource mutations read all collections before replacing them, a truncated snapshot can omit records from the replacement. Do not use mutation/sync on datasets approaching the project's query-return limit until pagination and concurrent-update handling are implemented and verified.
 
 When Redis is configured, rate limiting allows 60 requests/minute per verified user via an atomic increment/expiry operation. Configured Redis failure blocks the API. Reports cache user/month/transaction-hash results for 300 seconds; they still read the workspace to calculate the hash. With Redis absent, rate/cache integration is disabled. No browser Redis credentials are accepted.
 
