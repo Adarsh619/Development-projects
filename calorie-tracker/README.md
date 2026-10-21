@@ -1,71 +1,65 @@
 # Calorie Track
 
-A simple daily calorie-tracking web app built with React. Add foods to meals, track your calories against a daily goal, and keep a separate log for each day.
+A browser-based daily calorie tracker built with React and Vite. It lets a user log food by meal, compare the total against a daily calorie goal, and keep a separate log for each date.
+
+![Calorie Track app preview](docs/images/calorie-track-preview.png)
 
 ## Features
 
 - Add food entries with a name, calorie amount, and meal category
 - Organise entries into Breakfast, Lunch, Dinner, and Snack
-- View total calories eaten and calories remaining
-- Set a custom daily calorie goal
-- Visual calorie-progress ring
-- Navigate between dates to view separate daily logs
+- View calories eaten, calories remaining, and a visual progress ring
+- Set a daily calorie goal
+- Move between dates to maintain separate daily logs
 - Edit or remove saved food entries
-- Helpful validation for missing or invalid food entries
-- Saves data in your browser using local storage
+- Receive feedback for missing or invalid form values
+- Persist the daily goal and food logs in browser local storage
 
-## Built With
+## Technology
 
-- React
-- Vite
-- JavaScript
+- React 19
+- Vite 8
+- JavaScript (ES modules)
 - CSS
 - Browser Local Storage
 
-## Run Locally
+## Quick Start
 
-1. Clone this repository:
+### Prerequisites
 
-   ```bash
-   git clone <your-repository-url>
-   ```
+- [Node.js](https://nodejs.org/) (current LTS version recommended)
+- npm (installed with Node.js)
 
-2. Open the `calorie-tracker` folder in VS Code.
+### Installation
 
-3. Install the project dependencies:
+```bash
+git clone <your-repository-url>
+cd calorie-tracker
+npm install
+npm run dev
+```
 
-   ```bash
-   npm install
-   ```
-
-4. Start the development server:
-
-   ```bash
-   npm run dev
-   ```
-
-5. Open the local URL shown in the terminal, usually:
-
-   ```text
-   http://localhost:5173/
-   ```
+Vite will print a local URL, normally `http://localhost:5173/`. Open it in a browser.
 
 ## How to Use
 
-1. Enter a food name and its calorie amount.
-2. Select a meal category.
-3. Click **Add** to save it to the current day.
-4. Use **Edit** to update an entry or **Remove** to delete it.
-5. Change the daily goal when needed.
-6. Use the arrow buttons to view previous or future days.
+1. Enter a food name and calorie amount.
+2. Choose its meal category.
+3. Select **Add** to save the entry for the displayed date.
+4. Select **Edit** to change an entry, or **Remove** to delete it.
+5. Update the daily-goal field when required.
+6. Use the date arrows to view a different day's log.
 
-## Data Storage
+## Documentation
 
-This app stores calorie logs and the daily goal in your browser's local storage. Your entries remain after refreshing the page, but they are stored only in the browser/device you use.
+- [Architecture](docs/ARCHITECTURE.md) — application structure, data flow, and key decisions
+- [Data and privacy](docs/DATA_AND_PRIVACY.md) — stored data, validation, and current limitations
+- [Deployment](docs/DEPLOYMENT.md) — production build and static-hosting guidance
 
-## Future Improvements
+## Project Status
 
-- Weekly calorie summary
-- Mobile design refinements
-- Clear a day's log with confirmation
-- Optional nutrition information such as protein, carbs, and fat
+This is a front-end-only learning and portfolio project. It does not use an account system, backend service, or cloud database.
+
+## License
+
+No license has been selected yet. Add one before inviting outside contributors or sharing the project as open source.
